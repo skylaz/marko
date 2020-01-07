@@ -28,12 +28,6 @@ module.exports = function dynamicTag(
 ) {
     if (tag) {
         if (tag.default) {
-            // eslint-disable-next-line no-constant-condition
-            if ("MARKO_DEBUG") {
-                complain(
-                    "Passing an object with a default property to the <{dynamic}> tag is deprecated, Marko 5 recommends using ESM."
-                );
-            }
             tag = tag.default;
         }
 

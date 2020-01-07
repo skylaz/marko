@@ -5,7 +5,7 @@ var CustomTag;
 var path = require("path");
 var markoModules = require("../../compiler/modules");
 var complain = require("complain");
-var coreTagsPath = path.join(__dirname, "../../core-tags");
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function createCustomTag(el, tagDef) {
     CustomTag = CustomTag || require("../../compiler/ast/CustomTag");
@@ -87,7 +87,7 @@ class Tag {
     hasTransformers() {
         /*jshint unused:false */
         for (var k in this.transformers) {
-            if (this.transformers.hasOwnProperty(k)) {
+            if (hasOwnProperty.call(this.transformers, k)) {
                 return true;
             }
         }
@@ -96,12 +96,6 @@ class Tag {
 
     checkDeprecatedAttr(attr) {
         attr.filePath = this.filePath;
-        if (attr.name === "key" && !this.isCoreTag()) {
-            complain("@key property is deprecated", {
-                location: this.filePath
-            });
-        }
-        //
         if (attr.setFlag && attr.setFlag !== "hasComponentEvents") {
             complain(`${attr.name} - : set-flag property is deprecated`, {
                 location: this.filePath
@@ -136,13 +130,12 @@ class Tag {
                 ) {
                     attr.targetProperty = null;
                 } else if (!attr.targetProperty) {
-                    !this.isCoreTag() &&
-                        complain(
-                            'The default "targetProperty" for "@*" attribute definitions is changing from "*" to "null" (merged in with the rest of the input) in a future Marko release. In order to avoid an issue upgrading, please explicitly define the "targetProperty".',
-                            {
-                                location: this.filePath
-                            }
-                        );
+                    complain(
+                        'The default "targetProperty" for "@*" attribute definitions is changing from "*" to "null" (merged in with the rest of the input) in a future Marko release. In order to avoid an issue upgrading, please explicitly define the "targetProperty".',
+                        {
+                            location: this.filePath
+                        }
+                    );
                     attr.targetProperty = "*";
                 }
             }
@@ -155,7 +148,7 @@ class Tag {
     }
     forEachAttribute(callback, thisObj) {
         for (var attrName in this.attributes) {
-            if (this.attributes.hasOwnProperty(attrName)) {
+            if (hasOwnProperty.call(this.attributes, attrName)) {
                 callback.call(thisObj, this.attributes[attrName]);
             }
         }
@@ -181,7 +174,7 @@ class Tag {
     }
 
     hasAttribute(attrName) {
-        return this.attributes.hasOwnProperty(attrName);
+        return hasOwnProperty.call(this.attributes, attrName);
     }
 
     /**
@@ -312,10 +305,6 @@ class Tag {
     setTaglib(taglib) {
         this.taglibId = taglib ? taglib.id : null;
         this.taglibPath = taglib ? taglib.path : null;
-    }
-
-    isCoreTag() {
-        return this.filePath && this.filePath.startsWith(coreTagsPath);
     }
 }
 
