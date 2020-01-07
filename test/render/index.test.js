@@ -38,10 +38,7 @@ function testRunner(fixture) {
 
 function compareNormalized({ test, context }) {
     test(function() {
-        if (
-            !context.hasOwnProperty("html") ||
-            !context.hasOwnProperty("vdom")
-        ) {
+        if (!("html" in context) || !("vdom" in context)) {
             this.skip();
         } else {
             expect(context.html).to.equal(context.vdom);
@@ -82,6 +79,11 @@ async function runRenderTest(fixture) {
                     ? browser.require(templatePath)
                     : marko.load(templatePath, loadOptions);
                 let templateData = Object.assign({}, main.templateData || {});
+
+                if (template.default) {
+                    template = template.default;
+                }
+
                 await template.render(templateData);
             } catch (_e) {
                 e = _e;
@@ -202,7 +204,7 @@ function normalizeHtml(htmlOrNode) {
     }
 
     nodesToRemove.forEach(n => n.remove());
-    document.body.innerHTML = document.body.innerHTML;
+    document.body.innerHTML += "";
     document.body.normalize();
 
     return document.body.innerHTML.trim();
