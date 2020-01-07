@@ -125,18 +125,10 @@ class Tag {
                 attr.dynamicAttribute = true;
 
                 if (
-                    attr.targetProperty === null ||
+                    attr.targetProperty === undefined ||
                     attr.targetProperty === ""
                 ) {
                     attr.targetProperty = null;
-                } else if (!attr.targetProperty) {
-                    complain(
-                        'The default "targetProperty" for "@*" attribute definitions is changing from "*" to "null" (merged in with the rest of the input) in a future Marko release. In order to avoid an issue upgrading, please explicitly define the "targetProperty".',
-                        {
-                            location: this.filePath
-                        }
-                    );
-                    attr.targetProperty = "*";
                 }
             }
 
