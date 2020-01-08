@@ -284,7 +284,9 @@ Component.prototype = componentProto = {
         return els;
     },
     getComponent: function(key, index) {
-        var rootNode = this.___keyedElements[resolveKeyHelper(key, index)];
+        var rootNode = this.___keyedElements[
+            "@" + resolveKeyHelper(key, index)
+        ];
         if (/\[\]$/.test(key)) {
             // eslint-disable-next-line no-constant-condition
             if ("MARKO_DEBUG") {
@@ -297,7 +299,7 @@ Component.prototype = componentProto = {
         return rootNode && componentsByDOMNode.get(rootNode);
     },
     getComponents: function(key) {
-        var lookup = this.___keyedElements[key + "[]"];
+        var lookup = this.___keyedElements["@" + key + "[]"];
         return lookup
             ? Object.keys(lookup)
                   .map(function(key) {

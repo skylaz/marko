@@ -5,12 +5,8 @@ const getComponents = (module.exports = (template, components) => {
     components = components || {};
     if (meta) {
         if (!components[meta.id]) {
-            if (meta.id && meta.component) {
-                components[meta.id] = path.resolve(
-                    path.dirname(template.path),
-                    meta.component
-                );
-            }
+            components[meta.id] = template.path;
+
             if (meta.tags) {
                 meta.tags.forEach(tagRelativePath => {
                     var tagPath =
@@ -21,6 +17,7 @@ const getComponents = (module.exports = (template, components) => {
                               )
                             : tagRelativePath;
                     var tagTemplate = require(tagPath);
+                    tagTemplate = tagTemplate.default || tagTemplate;
                     components = getComponents(tagTemplate, components);
                 });
             }

@@ -7,5 +7,8 @@
     "globals": {
         "document": true,
         "ShadowRoot": true
+    },
+    "rules": {
+        "no-prototype-builtins": 1
     }
 }
