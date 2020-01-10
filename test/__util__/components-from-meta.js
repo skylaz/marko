@@ -5,7 +5,11 @@ const getComponents = (module.exports = (template, components) => {
     components = components || {};
     if (meta) {
         if (!components[meta.id]) {
-            components[meta.id] = template.path;
+            const dir = path.dirname(template.path);
+            components[meta.id] =
+                meta.component && /-browser/.test(meta.component)
+                    ? path.resolve(dir, meta.component)
+                    : template.path;
 
             if (meta.tags) {
                 const dir = path.dirname(template.path);

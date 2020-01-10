@@ -73,16 +73,6 @@ function runHydrateTest(fixture) {
                 var browser = createBrowserWithMarko(__dirname, String(html), {
                     beforeParse(window, browser) {
                         var marko = browser.require("marko/components");
-                        var legacy = browser.require("marko/legacy-components");
-                        legacy.load = type =>
-                            legacy.defineWidget(
-                                browser.require(
-                                    type.replace(
-                                        /^.*\/components-browser/,
-                                        __dirname
-                                    )
-                                )
-                            );
                         var rootComponent = browser.require(
                             hydrateComponentPath
                         );
