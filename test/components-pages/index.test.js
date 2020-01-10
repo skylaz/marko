@@ -19,6 +19,7 @@ function run(fixture) {
         var testFile = resolve("tests.js");
         var templateFile = resolve("template.marko");
         var template = require(templateFile);
+        template = template.default || template;
         return template
             .render({})
             .then(function(result) {
