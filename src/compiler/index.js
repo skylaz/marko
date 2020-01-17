@@ -89,7 +89,7 @@ function _compile(src, filename, userOptions, callback) {
         code: true,
         babelrc: false,
         configFile: true,
-        sourceMaps: true,
+        sourceMaps: "inline",
         filename,
         sourceFileName: filename,
         plugins: [[require("babel-plugin-marko"), options]]
