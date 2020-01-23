@@ -8,7 +8,6 @@ var asyncTestSuite = require("../__util__/async-test-suite");
 var createBrowserWithMarko = require("../__util__/create-marko-jsdom-module");
 
 autotest("fixtures", run);
-autotest("fixtures-deprecated", run);
 
 /**
  * Builds a page with marko & lasso and then pipes it through jsdom, loading co-located tests.

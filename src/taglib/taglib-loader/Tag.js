@@ -1,22 +1,10 @@
 "use strict";
 var forEachEntry = require("raptor-util/forEachEntry");
 var ok = require("assert").ok;
-var CustomTag;
 var path = require("path");
 var markoModules = require("../../compiler/modules");
 var complain = require("complain");
 var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-function createCustomTag(el, tagDef) {
-    CustomTag = CustomTag || require("../../compiler/ast/CustomTag");
-    return new CustomTag(el, tagDef);
-}
-
-function createCustomTagNodeFactory(tagDef) {
-    return function nodeFactory(el) {
-        return createCustomTag(el, tagDef);
-    };
-}
 
 class Tag {
     constructor(filePath) {
@@ -253,41 +241,6 @@ class Tag {
                     this.migrators[path] || markoModules.require(path));
             }, this)
             .forEach(callback, thisObj);
-    }
-
-    getNodeFactory() {
-        var nodeFactory = this._nodeFactory;
-        if (nodeFactory !== undefined) {
-            return nodeFactory;
-        }
-
-        let codeGeneratorModulePath = this.codeGeneratorModulePath;
-
-        if (this.codeGeneratorModulePath) {
-            var loadedCodeGenerator = markoModules.require(
-                this.codeGeneratorModulePath
-            );
-            nodeFactory = function(elNode) {
-                elNode.setType(codeGeneratorModulePath);
-                elNode.setCodeGenerator(loadedCodeGenerator);
-                return elNode;
-            };
-        } else if (this.nodeFactoryPath) {
-            nodeFactory = markoModules.require(this.nodeFactoryPath);
-            if (typeof nodeFactory !== "function") {
-                throw new Error(
-                    'Invalid node factory exported by module at path "' +
-                        this.nodeFactoryPath +
-                        '"'
-                );
-            }
-        } else if (this.renderer || this.template || this.isNestedTag) {
-            nodeFactory = createCustomTagNodeFactory(this);
-        } else {
-            return null;
-        }
-
-        return (this._nodeFactory = nodeFactory);
     }
 
     toJSON() {

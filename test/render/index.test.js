@@ -18,17 +18,7 @@ autotest("fixtures", {
     "html ≅ vdom": compareNormalized
 });
 
-autotest("fixtures-deprecated", {
-    html: testRunner,
-    vdom: testRunner,
-    "html ≅ vdom": compareNormalized
-});
-
 autotest("fixtures-async-callback", {
-    html: testRunner
-});
-
-autotest("fixtures-async-deprecated", {
     html: testRunner
 });
 

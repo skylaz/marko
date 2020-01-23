@@ -29,7 +29,6 @@
     "dependencies": {
         "app-module-path": "^2.2.0",
         "argly": "^1.0.0",
-        "browser-refresh-client": "^1.0.0",
         "camelcase": "^5.0.0",
         "char-props": "~0.1.5",
         "complain": "^1.6.0",
@@ -57,7 +56,6 @@
     "devDependencies": {
         "@babel/core": "^7.7.7",
         "@babel/preset-env": "^7.7.7",
-        "@marko/migrate": "^5.1.0",
         "babel-plugin-minprops": "^2.0.1",
         "babel-plugin-marko": "*",
         "benchmark": "^2.1.1",
@@ -75,7 +73,6 @@
         "jsdom-context-require": "^1.0.1",
         "lasso-resolve-from": "^1.2.0",
         "lint-staged": "^9.2.5",
-        "marko-widgets": "^7.0.1",
         "micromatch": "^3.0.4",
         "mocha": "^5.2.0",
         "nyc": "^14.1.1",
@@ -144,22 +141,14 @@
         "bin",
         "dist",
         "docs",
-        "helpers",
         "src",
-        "browser-refresh.js",
         "compiler-browser.marko",
         "compiler.js",
         "components-browser.marko",
         "components.js",
         "env.js",
-        "express.js",
-        "hot-reload.js",
         "index-browser.marko",
         "index.js",
-        "jquery.marko",
-        "legacy-components-browser.marko",
-        "legacy-components.js",
-        "node-require.js",
-        "ready.marko"
+        "node-require.js"
     ]
 }

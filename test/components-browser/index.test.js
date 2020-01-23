@@ -15,11 +15,6 @@ autotest("fixtures", {
     hydrate: runHydrateTest
 });
 
-autotest("fixtures-deprecated", {
-    client: runClientTest
-    // hydrate: runHydrateTest
-});
-
 function runClientTest(fixture) {
     let test = fixture.test;
     let resolve = fixture.resolve;

@@ -162,3 +162,9 @@ module.exports = function dynamicTag(
         out.___endFragment();
     }
 };
+
+function removeDashes(str) {
+    return str.replace(/-([a-z])/g, function(match, lower) {
+        return lower.toUpperCase();
+    });
+}

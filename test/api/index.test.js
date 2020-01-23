@@ -25,18 +25,3 @@ autotest("fixtures", fixture => {
         );
     });
 });
-
-autotest("fixtures-deprecated", fixture => {
-    let test = fixture.test;
-    let resolve = fixture.resolve;
-    let snapshot = fixture.snapshot;
-    test(done => {
-        require(resolve("test.js")).check(
-            marko,
-            markoCompiler,
-            expect,
-            snapshot,
-            done
-        );
-    });
-});
