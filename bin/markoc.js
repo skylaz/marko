@@ -89,6 +89,11 @@ var args = require("argly")
             type: "boolean",
             description: "Browser output"
         },
+        "--source-maps -s": {
+            type: "string",
+            description:
+                "Output a sourcemap beside the compiled file. (use --source-maps inline for an inline source map)"
+        },
         "--version -v": {
             type: "boolean",
             description:
@@ -144,6 +149,8 @@ if (args.vdom || args.browser) {
 var compileOptions = {
     output: output,
     browser: isForBrowser,
+    sourceOnly: false,
+    sourceMaps: args.sourceMaps || false,
     compilerType: "markoc",
     compilerVersion: markoPkgVersion || markocPkgVersion
 };
@@ -352,7 +359,7 @@ if (args.clean) {
 
         context.beginAsync();
 
-        markoCompiler.compileFile(path, compileOptions, function(err, src) {
+        markoCompiler.compileFile(path, compileOptions, function(err, result) {
             if (err) {
                 failed.push(
                     'Failed to compile "' +
@@ -364,8 +371,9 @@ if (args.clean) {
                 return;
             }
 
+            var src = result.code;
             context.beginAsync();
-            fs.writeFile(outPath, src, { encoding: "utf8" }, function(err) {
+            fs.writeFile(outPath, src, "utf8", function(err) {
                 if (err) {
                     failed.push(
                         'Failed to write "' +
@@ -374,6 +382,31 @@ if (args.clean) {
                             (err.stack || err)
                     );
                     context.endAsync(err);
+                    return;
+                }
+
+                if (result.map) {
+                    fs.writeFile(
+                        outPath + ".map",
+                        JSON.stringify(result.map),
+                        "utf-8",
+                        function(err) {
+                            if (err) {
+                                failed.push(
+                                    'Failed to write sourcemap"' +
+                                        path +
+                                        '". Error: ' +
+                                        (err.stack || err)
+                                );
+                                context.endAsync(err);
+                                return;
+                            }
+
+                            compileCount++;
+                            context.endAsync();
+                        }
+                    );
+
                     return;
                 }
 

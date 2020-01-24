@@ -19,7 +19,15 @@ if (g.__MARKO_CONFIG) {
          * Whether unrecognized tags should be ignored or not. This flag will
          * be enabled by default when compiling XML.
          */
-        ignoreUnrecognizedTags: false
+        ignoreUnrecognizedTags: false,
+
+        /**
+         * Whether source maps should be output with the compiled templates.
+         * When `true` a `map` property will be available on the compile result.
+         * When `"inline"` the sourcemap will be inlined as a comment in the output code.
+         * When `"both"` both of the above will be used.
+         */
+        sourceMaps: false
     };
 
     if (process.env.MARKO_CONFIG) {

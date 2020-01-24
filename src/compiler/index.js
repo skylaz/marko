@@ -36,19 +36,19 @@ function _compile(src, filename, userConfig, callback) {
     ok(filename, '"filename" argument is required');
     ok(typeof filename === "string", '"filename" argument should be a string');
 
-    var markoConfig = {};
-    var baseBabelConfig = {
-        filename: filename,
-        sourceFileName: filename,
-        sourceType: "module",
-        plugins: [[markoBabelPlugin, markoConfig]]
-    };
-
-    extend(markoConfig, globalConfig);
+    var markoConfig = extend({}, globalConfig);
 
     if (userConfig) {
         extend(markoConfig, userConfig);
     }
+
+    var baseBabelConfig = {
+        filename: filename,
+        sourceFileName: filename,
+        sourceType: "module",
+        sourceMaps: markoConfig.sourceMaps,
+        plugins: [[markoBabelPlugin, markoConfig]]
+    };
 
     if (markoConfig.writeVersionComment) {
         baseBabelConfig.auxiliaryCommentBefore =
@@ -67,6 +67,7 @@ function _compile(src, filename, userConfig, callback) {
         result = userConfig.sourceOnly
             ? compiled.code
             : {
+                  map: compiled.map,
                   code: compiled.code,
                   meta: compiled.metadata.marko
               };
