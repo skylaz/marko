@@ -158,6 +158,7 @@ exports.compileFileForBrowser = compileFileForBrowser;
 
 exports.configure = configure;
 
+// TODO: resolve these circular dep issues.
 Object.defineProperties(exports, {
     taglibLookup: {
         get() {
@@ -172,6 +173,11 @@ Object.defineProperties(exports, {
     taglibFinder: {
         get() {
             return taglib.finder;
+        }
+    },
+    buildTaglibLookup: {
+        get() {
+            return markoBabelPlugin.buildTaglibLookup;
         }
     }
 });

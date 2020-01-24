@@ -37,8 +37,6 @@ var Minimatch = require("minimatch").Minimatch;
 
 var appModulePath = require("app-module-path");
 
-markoCompiler.defaultOptions.checkUpToDate = false;
-
 var mmOptions = {
     matchBase: true,
     dot: true,
@@ -85,7 +83,11 @@ var args = require("argly")
         },
         "--vdom -V": {
             type: "boolean",
-            description: "VDOM output"
+            description: "VDOM output (deprecated, prefer --browser)"
+        },
+        "--browser -b": {
+            type: "boolean",
+            description: "Browser output"
         },
         "--version -v": {
             type: "boolean",
@@ -134,7 +136,7 @@ var output = "html";
 
 var isForBrowser = false;
 
-if (args.vdom) {
+if (args.vdom || args.browser) {
     output = "vdom";
     isForBrowser = true;
 }
