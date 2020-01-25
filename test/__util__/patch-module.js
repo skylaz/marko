@@ -30,9 +30,6 @@ Module._resolveFilename = function(request, parent, isMain) {
     if (request.charAt(0) !== ".") {
         if (
             request === "marko/components" ||
-            request === "marko/jquery" ||
-            request === "marko/legacy-components" ||
-            request === "marko/ready" ||
             request === "marko/env" ||
             request.startsWith("marko/dist/") ||
             request.startsWith("marko/src/") ||
