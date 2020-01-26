@@ -3,7 +3,7 @@
 require("../__util__/test-init");
 
 var path = require("path");
-var autotest = require("../autotest");
+var autotest = require("mocha-autotest").default;
 var asyncTestSuite = require("../__util__/async-test-suite");
 var createBrowserWithMarko = require("../__util__/create-marko-jsdom-module");
 

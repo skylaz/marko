@@ -2,7 +2,7 @@
 
 require("../__util__/test-init");
 
-var autotest = require("../autotest");
+var autotest = require("mocha-autotest").default;
 
 autotest("fixtures", run);
 

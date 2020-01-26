@@ -10,7 +10,7 @@ require("../../compiler");
 // TODO: currently this causes babel to recompile the compiler multiple times.
 // We should fix this since it makes the tests very slow.
 
-// var autotest = require("../autotest");
+// var autotest = require("mocha-autotest").default;
 // var markocPath = require.resolve("../../bin/markoc");
 // var childProcess = require("child_process");
 // var fs = require("fs");

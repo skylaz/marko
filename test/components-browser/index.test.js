@@ -1,7 +1,7 @@
 "use strict";
 require("../__util__/test-init");
 
-var autotest = require("../autotest");
+var autotest = require("mocha-autotest").default;
 var createBrowserWithMarko = require("../__util__/create-marko-jsdom-module");
 var ssrTemplate = require("./template.marko").default;
 var hydrateComponentPath = require.resolve("./template.component-browser.js");
