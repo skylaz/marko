@@ -1,12 +1,10 @@
 "use strict";
 
-var babel = require("@babel/core");
-var markoBabelPlugin = require("babel-plugin-marko");
+var compiler = require("@marko/compiler");
 var extend = require("raptor-util/extend");
 var globalConfig = require("./config");
 var ok = require("assert").ok;
 var fs = require("fs");
-var pkg = require("../../package.json");
 var taglib = require("../taglib");
 var defaults = extend({}, globalConfig);
 
@@ -30,59 +28,32 @@ function configure(newConfig) {
 
     globalConfig = extend({}, defaults);
     extend(globalConfig, newConfig);
+
+    compiler.configure(newConfig);
+}
+
+function resultCompat({ code, meta }, options = {}) {
+    if (options.sourceOnly !== false) {
+        return code;
+    } else {
+        return { code, meta };
+    }
 }
 
 function _compile(src, filename, userConfig, callback) {
     ok(filename, '"filename" argument is required');
     ok(typeof filename === "string", '"filename" argument should be a string');
 
-    var markoConfig = extend({}, globalConfig);
-
-    if (userConfig) {
-        extend(markoConfig, userConfig);
-    }
-
-    var baseBabelConfig = {
-        filename: filename,
-        sourceFileName: filename,
-        sourceType: "module",
-        sourceMaps: markoConfig.sourceMaps,
-        plugins: [[markoBabelPlugin, markoConfig]]
-    };
-
-    if (markoConfig.writeVersionComment) {
-        baseBabelConfig.auxiliaryCommentBefore =
-            "Compiled using marko@" + pkg.version + " - DO NOT EDIT";
-    }
-
-    if (markoConfig.babelConfig) {
-        extend(baseBabelConfig, markoConfig.babelConfig);
-    }
-
-    var babelConfig = babel.loadPartialConfig(baseBabelConfig).options;
-    let result;
-
-    try {
-        const compiled = babel.transformSync(src, babelConfig);
-        result = userConfig.sourceOnly
-            ? compiled.code
-            : {
-                  map: compiled.map,
-                  code: compiled.code,
-                  meta: compiled.metadata.marko
-              };
-    } catch (e) {
-        if (callback) {
-            return callback(e);
-        } else {
-            throw e;
-        }
-    }
-
     if (callback) {
-        callback(null, result);
+        compiler.compile(src, filename, userConfig).then(
+        result => callback(null, resultCompat(result, userConfig)),
+        error => callback(error)
+        );
     } else {
-        return result;
+        return resultCompat(
+        compiler.compileSync(src, filename, userConfig),
+        userConfig
+        );
     }
 }
 
@@ -145,10 +116,7 @@ function compileFileForBrowser(filename, options, callback) {
         options = null;
     }
 
-    options = extend(
-        { output: "vdom", meta: false, sourceOnly: false },
-        options
-    );
+    options = extend({ output: "vdom", meta: false, sourceOnly: false }, options);
     return compileFile(filename, options, callback);
 }
 
@@ -178,7 +146,7 @@ Object.defineProperties(exports, {
     },
     buildTaglibLookup: {
         get() {
-            return markoBabelPlugin.buildTaglibLookup;
+            return compiler.taglib.buildLookup;
         }
     }
 });
