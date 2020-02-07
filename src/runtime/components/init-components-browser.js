@@ -13,6 +13,7 @@ var ComponentDef = require("./ComponentDef");
 var registry = require("./registry");
 var domData = require("./dom-data");
 var componentsByDOMNode = domData.___componentByDOMNode;
+var keysByDOMNode = domData.___keyByDOMNode;
 var serverRenderedGlobals = {};
 var serverComponentRootNodes = {};
 var keyedElementsByComponentId = {};
@@ -103,6 +104,7 @@ function indexServerComponentBoundaries(node, runtimeId, stack) {
                         (keyedElementsByComponentId[ownerId] = {});
                 }
                 keyedElements[markoKey] = node;
+                keysByDOMNode.set(node, markoKey);
             }
             if (markoProps) {
                 markoProps = JSON.parse(markoProps);
@@ -348,6 +350,8 @@ function hydrateComponentAndGetMount(componentDef, doc) {
     var rootNode = serverComponentRootNodes[componentId];
     var renderResult;
 
+    component.___needsHydrate = true;
+
     if (rootNode) {
         delete serverComponentRootNodes[componentId];
 
@@ -360,7 +364,7 @@ function hydrateComponentAndGetMount(componentDef, doc) {
 
         if (componentDef.___flags & FLAG_WILL_RERENDER_IN_BROWSER) {
             component.___document = doc;
-            renderResult = component.___rerender(component.___input, true);
+            renderResult = component.___rerender(component.___input);
             trackComponent(componentDef);
             return function mount() {
                 renderResult.afterInsert(doc);

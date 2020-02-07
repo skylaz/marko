@@ -12,9 +12,5 @@ module.exports = function(helpers) {
         "getWidgetConfig"
     ];
 
-    if (helpers.isHydrate) {
-        expectedConfig.push("getTemplateData");
-    }
-
     expect(widget.config).to.deep.equal(expectedConfig);
 };

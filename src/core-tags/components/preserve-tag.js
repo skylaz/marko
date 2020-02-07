@@ -1,14 +1,15 @@
 module.exports = function render(input, out) {
     var globalContext = out.___components.___globalContext;
+    var ownerComponentDef = out.___assignedComponentDef;
+    var isLegacy = ownerComponentDef.___isLegacy;
     var parentPreserved = globalContext.___isPreserved;
     var shouldPreserve = Boolean(!("if" in input) || input["if"]);
 
-    if (parentPreserved || !shouldPreserve) {
+    if (!isLegacy && (parentPreserved || !shouldPreserve)) {
         input.renderBody && input.renderBody(out);
         return;
     }
 
-    var ownerComponentDef = out.___assignedComponentDef;
     var ownerComponent = ownerComponentDef.___component;
     var key = out.___assignedKey;
 

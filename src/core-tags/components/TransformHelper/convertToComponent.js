@@ -27,6 +27,7 @@ module.exports = function handleComponentBind(options) {
     var isSplit = false;
 
     if (
+        isLegacyComponent ||
         (rendererModule && rendererModule !== componentModule) ||
         (!rendererModule && componentModule)
     ) {

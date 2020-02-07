@@ -289,10 +289,20 @@ function morphdom(fromNode, toNode, doc, componentsContext) {
                     fromNextSibling = nextSibling(curFromNodeChild);
                 }
 
-                if (curFromNodeKey === curToNodeKey) {
+                if (!isHydrate && curFromNodeKey === curToNodeKey) {
                     // Elements line up. Now we just have to make sure they are compatible
                     if (!curToNodeChild.___preserve) {
                         // We just skip over the fromNode if it is preserved
+
+                        if (!curVFromNodeChild) {
+                            curVFromNodeChild = virtualizeElement(
+                                curFromNodeChild
+                            );
+                            vElementByDOMNode.set(
+                                curFromNodeChild,
+                                curVFromNodeChild
+                            );
+                        }
 
                         if (
                             compareNodeNames(curToNodeChild, curVFromNodeChild)
@@ -326,6 +336,7 @@ function morphdom(fromNode, toNode, doc, componentsContext) {
                     }
                 } else {
                     if (
+                        isHydrate === true ||
                         (matchingFromEl =
                             referenceComponent.___keyedElements[
                                 curToNodeKey

@@ -65,9 +65,7 @@ function createRendererFunc(templateRenderFunc, componentProps) {
                 customEvents,
                 ownerComponentId
             );
-            if (input.widgetProps) {
-                component.input = input.widgetProps;
-            }
+            component.input = undefined;
         } else {
             if (!component) {
                 if (isRerender) {

@@ -105,15 +105,23 @@ BrowserHelpers.prototype = {
         for (var i = 0; i < children1.length; i++) {
             var child1 = children1[i];
             var child2 = children2[i];
-            assert.ok(
-                child1 === child2,
-                "Children at index " +
-                    i +
-                    " do not match. child 1: " +
-                    child1 +
-                    " child 2: " +
-                    child2
-            );
+            var isFragmentMarker =
+                child1.nodeType === 8 &&
+                child2.nodeType === 3 &&
+                child2.data === "" &&
+                /^F(\/$|#)/.test(child1.data);
+
+            if (!isFragmentMarker) {
+                assert.ok(
+                    child1 === child2,
+                    "Children at index " +
+                        i +
+                        " do not match. child 1: " +
+                        child1 +
+                        " child 2: " +
+                        child2
+                );
+            }
         }
     },
 

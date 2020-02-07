@@ -94,9 +94,12 @@ module.exports = function dynamicTag(
 
                 if (isFn) {
                     var flags = componentDef ? componentDef.___flags : 0;
+                    var isLegacy = componentDef.___isLegacy;
                     var willRerender = flags & FLAG_WILL_RERENDER_IN_BROWSER;
                     var isW10NOOP = render === w10NOOP;
-                    var preserve = IS_SERVER ? willRerender : isW10NOOP;
+                    var preserve = IS_SERVER
+                        ? willRerender || isLegacy
+                        : isW10NOOP;
                     out.___beginFragment(key, component, preserve);
                     if (!isW10NOOP && isFn) {
                         var componentsContext = getComponentsContext(out);

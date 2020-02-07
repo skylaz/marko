@@ -8,7 +8,7 @@ module.exports = function(helpers) {
     var oldButton1El = oldButton1Widget.el;
     var oldButton2El = widget.getEl("button2");
 
-    expect(widget.getWidget("button1").el.innerHTML).to.equal("normal");
+    expect(widget.getWidget("button1").el.textContent).to.equal("normal");
 
     var self = widget;
 
@@ -22,7 +22,7 @@ module.exports = function(helpers) {
     expect(widget.getWidget("button1")).to.equal(oldButton1Widget);
     expect(widget.getWidget("button2")).to.equal(oldButton2Widget);
 
-    expect(widget.getWidget("button1").el.innerHTML).to.equal("small");
+    expect(widget.getWidget("button1").el.textContent).to.equal("small");
 
     // // State changed for button1 so it should have a new el
     // // since it re-renders to update its view

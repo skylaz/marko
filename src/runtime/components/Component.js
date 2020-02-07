@@ -548,7 +548,7 @@ Component.prototype = componentProto = {
         this.___reset();
     },
 
-    ___rerender: function(input, isHydrate) {
+    ___rerender: function(input) {
         var doc = this.___document;
         var globalData = this.___global;
         var rootNode = this.___rootNode;
@@ -562,7 +562,7 @@ Component.prototype = componentProto = {
         var componentsContext = getComponentsContext(out);
         var globalComponentsContext = componentsContext.___globalContext;
         globalComponentsContext.___rerenderComponent = this;
-        globalComponentsContext.___isHydrate = isHydrate;
+        globalComponentsContext.___isHydrate = this.___needsHydrate;
 
         renderer(input, out);
 
@@ -571,6 +571,8 @@ Component.prototype = componentProto = {
         var targetNode = out.___getOutput().___firstChild;
 
         morphdom(rootNode, targetNode, doc, componentsContext);
+
+        this.___needsHydrate = false;
 
         return result;
     },
