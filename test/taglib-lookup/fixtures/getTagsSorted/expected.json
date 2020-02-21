@@ -1,5 +1,5 @@
 [
-    "_no-update",
+    "_preserve",
     "*",
     "a",
     "abbr",

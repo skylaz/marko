@@ -104,10 +104,12 @@ module.exports = function dynamicTag(
                 var isFn = typeof render === "function";
 
                 // eslint-disable-next-line no-constant-condition
-                if ("MARKO_DEBUG" && render.safeHTML) {
+                if ("MARKO_DEBUG") {
+                    if (render.safeHTML || render.toHTML) {
                         throw new Error(
                             "Using `<include(x)/>` or the `<${dynamic}/>` tags with a `{ safeHTML: ... }` object is no longer supported. Use the unescaped text placeholder syntax instead."
                             );
+                    }
                 }
                 if (isFn) {
                     var flags = componentDef ? componentDef.___flags : 0;

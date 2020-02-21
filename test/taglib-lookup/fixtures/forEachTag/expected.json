@@ -227,7 +227,7 @@
     "for",
     "while",
     "html-comment",
-    "_no-update",
+    "_preserve",
     "component-globals",
     "init-components",
     "await",

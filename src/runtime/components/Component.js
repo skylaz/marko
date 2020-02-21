@@ -248,8 +248,11 @@ Component.prototype = componentProto = {
         if (key) {
             var keyedElement = this.___keyedElements["@" + resolveKeyHelper(key, index)];
 
-            if ("MARKO_DEBUG" && keyedElement && keyedElement.nodeType !== 1 /* Node.ELEMENT_NODE */) {
-                throw new Error("Using 'getEl(key)' to get a component instance is not supported, did you mean 'getComponent(key)'?");
+            // eslint-disable-next-line no-constant-condition
+            if ("MARKO_DEBUG") {
+                if (keyedElement && keyedElement.nodeType !== 1 /* Node.ELEMENT_NODE */) {
+                    throw new Error("Using 'getEl(key)' to get a component instance is not supported, did you mean 'getComponent(key)'?");
+                }
             }
 
             return keyedElement;
@@ -274,10 +277,12 @@ Component.prototype = componentProto = {
             "@" + resolveKeyHelper(key, index)
         ];
         // eslint-disable-next-line no-constant-condition
-        if ("MARKO_DEBUG" && /\[\]$/.test(key)) {
-            throw new Error(
-                "A repeated key[] was passed to getComponent. Use a non-repeating key if there is only one of these components."
-            );
+        if ("MARKO_DEBUG") {
+            if (/\[\]$/.test(key)) {
+                throw new Error(
+                    "A repeated key[] was passed to getComponent. Use a non-repeating key if there is only one of these components."
+                );
+            }
         }
 
         return rootNode && componentsByDOMNode.get(rootNode);

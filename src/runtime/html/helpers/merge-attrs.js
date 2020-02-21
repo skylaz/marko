@@ -8,22 +8,24 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
  */
 module.exports = function mergeAttrs() {
     var result = "";
-    var currentAttrs = {};
+    var finalAttributes = {};
     for (var i = 0; i < arguments.length; i++) {
-        var source = arguments[i];
-        if (source != null) {
+        var attributes = arguments[i];
+        if (attributes != null) {
             // eslint-disable-next-line no-constant-condition
-            if ("MARKO_DEBUG" && typeof source !== "object") {
-                throw new Error("A non object was passed as a dynamic attributes value.");
+            if ("MARKO_DEBUG") {
+                if (typeof attributes !== "object") {
+                    throw new Error("A non object was passed as a dynamic attributes value.");
+                }
             }
 
-            for (var k in source) {
-                if (hasOwnProperty.call(source, k)) {
-                    currentAttrs[k] = source[k];
+            for (var k in attributes) {
+                if (hasOwnProperty.call(attributes, k)) {
+                    finalAttributes[k] = attributes[k];
                 }
             }
         }
     }
 
-    return result + attrsHelper(currentAttrs);
+    return result + attrsHelper(finalAttributes);
 };

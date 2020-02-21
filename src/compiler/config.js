@@ -27,7 +27,14 @@ if (g.__MARKO_CONFIG) {
          * When `"inline"` the sourcemap will be inlined as a comment in the output code.
          * When `"both"` both of the above will be used.
          */
-        sourceMaps: false
+        sourceMaps: false,
+
+        /**
+         * This option inlines all of the meta data in the template.
+         * You can also access this metadata via `compile(...).meta`.
+         * This API is sticking around for compatibility purposes.
+         */
+        meta: true
     };
 
     if (process.env.MARKO_CONFIG) {

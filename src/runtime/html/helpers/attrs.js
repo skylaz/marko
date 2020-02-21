@@ -14,8 +14,10 @@ var invalidAttrs = Object.create(null);
 module.exports = function attrs(attributes) {
     if (attributes != null) {
         // eslint-disable-next-line no-constant-condition
-        if ("MARKO_DEBUG" && typeof attributes !== "object") {
-            throw new Error("A non object was passed as a dynamic attributes value.");
+        if ("MARKO_DEBUG") {
+            if (typeof attributes !== "object") {
+                throw new Error("A non object was passed as a dynamic attributes value.");
+            }
         }
 
         var result = "";

@@ -43,16 +43,23 @@ function resultCompat({ code, meta }, options = {}) {
 function _compile(src, filename, userConfig, callback) {
     ok(filename, '"filename" argument is required');
     ok(typeof filename === "string", '"filename" argument should be a string');
+    var options = {};
+
+    extend(options, globalConfig);
+
+    if (userConfig) {
+        extend(options, userConfig);
+    }
 
     if (callback) {
-        compiler.compile(src, filename, userConfig).then(
-        result => callback(null, resultCompat(result, userConfig)),
+        compiler.compile(src, filename, options).then(
+        result => callback(null, resultCompat(result, options)),
         error => callback(error)
         );
     } else {
         return resultCompat(
-        compiler.compileSync(src, filename, userConfig),
-        userConfig
+        compiler.compileSync(src, filename, options),
+        options
         );
     }
 }
