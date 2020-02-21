@@ -11,31 +11,30 @@ var invalidAttrNameCharacters = /[\s'"</=\\]/u;
 var validAttrs = Object.create(null);
 var invalidAttrs = Object.create(null);
 
-module.exports = function attrs(arg) {
-    if (typeof arg === "object") {
-        var out = "";
-        for (var attrName in arg) {
+module.exports = function attrs(attributes) {
+    if (attributes != null) {
+        // eslint-disable-next-line no-constant-condition
+        if ("MARKO_DEBUG" && typeof attributes !== "object") {
+            throw new Error("A non object was passed as a dynamic attributes value.");
+        }
+
+        var result = "";
+
+        for (var attrName in attributes) {
             if (attrName === "style") {
-                out += styleAttrHelper(arg[attrName]);
+                result += styleAttrHelper(attributes[attrName]);
             } else if (attrName === "class") {
-                out += classAttrHelper(arg[attrName]);
+                result += classAttrHelper(attributes[attrName]);
             } else if (attrName !== "renderBody" && isValidAttrName(attrName)) {
-                out += attrHelper(
+                result += attrHelper(
                     changeCase.___camelToDashCase(attrName),
-                    arg[attrName]
+                    attributes[attrName]
                 );
             }
         }
-        return out;
-    } else if (typeof arg === "string") {
-        // eslint-disable-next-line no-constant-condition
-        if ("MARKO_DEBUG") {
-            complain(
-                "Passing a string as a dynamic attribute value is deprecated - More details: https://github.com/marko-js/marko/wiki/Deprecation:-String-as-dynamic-attribute-value"
-            );
-        }
-        return arg;
+        return result;
     }
+
     return "";
 };
 

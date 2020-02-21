@@ -1,7 +1,7 @@
 "use strict";
 
-var complain = "MARKO_DEBUG" && require("complain");
 var attrsHelper = require("./attrs");
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
  * Merges attribute objects into a string.
@@ -11,23 +11,14 @@ module.exports = function mergeAttrs() {
     var currentAttrs = {};
     for (var i = 0; i < arguments.length; i++) {
         var source = arguments[i];
-        if (typeof source === "string") {
+        if (source != null) {
             // eslint-disable-next-line no-constant-condition
-            if ("MARKO_DEBUG") {
-                complain(
-                    "Passing a string as dynamic attributes ('<div ${string}>' or '<div ...string>') is deprecated, use an object instead."
-                );
+            if ("MARKO_DEBUG" && typeof source !== "object") {
+                throw new Error("A non object was passed as a dynamic attributes value.");
             }
 
-            if (source[0] !== " ") {
-                source = " " + source;
-            }
-
-            result += attrsHelper(currentAttrs) + source;
-            currentAttrs = {};
-        } else if (source != null) {
             for (var k in source) {
-                if (source.hasOwnProperty(k)) {
+                if (hasOwnProperty.call(source, k)) {
                     currentAttrs[k] = source[k];
                 }
             }

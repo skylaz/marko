@@ -8,7 +8,12 @@ var styleHelper = require("../../helpers/style-value");
  * Helper for processing dynamic attributes
  */
 module.exports = function(attributes) {
-    if (attributes) {
+    if (attributes != null) {
+        // eslint-disable-next-line no-constant-condition
+        if ("MARKO_DEBUG" && typeof arg !== "object") {
+            throw new Error("A non object was passed as a dynamic attributes value.");
+        }
+
         var newAttributes = {};
 
         for (var attrName in attributes) {

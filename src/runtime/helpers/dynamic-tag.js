@@ -103,18 +103,12 @@ module.exports = function dynamicTag(
                 var render = (tag && tag.renderBody) || tag;
                 var isFn = typeof render === "function";
 
-                if (render.safeHTML) {
-                    // eslint-disable-next-line no-constant-condition
-                    if ("MARKO_DEBUG") {
-                        complain(
-                            "Using `<include(x)/>` or the `<${dynamic}/>` tags with a `{ safeHTML: ... }` object is deprecated. Use the unescaped text placeholder syntax instead."
-                        );
-                    }
-
-                    out.write(tag.safeHTML);
-                    return;
+                // eslint-disable-next-line no-constant-condition
+                if ("MARKO_DEBUG" && render.safeHTML) {
+                        throw new Error(
+                            "Using `<include(x)/>` or the `<${dynamic}/>` tags with a `{ safeHTML: ... }` object is no longer supported. Use the unescaped text placeholder syntax instead."
+                            );
                 }
-
                 if (isFn) {
                     var flags = componentDef ? componentDef.___flags : 0;
                     var willRerender = flags & FLAG_WILL_RERENDER_IN_BROWSER;
@@ -162,9 +156,3 @@ module.exports = function dynamicTag(
         out.___endFragment();
     }
 };
-
-function removeDashes(str) {
-    return str.replace(/-([a-z])/g, function(match, lower) {
-        return lower.toUpperCase();
-    });
-}
