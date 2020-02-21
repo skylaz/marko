@@ -43,30 +43,6 @@ class Tag {
         // this._nodeFactory = undefined;
     }
 
-    /**
-     * DEPRECATED
-     */
-    forEachVariable(callback, thisObj) {
-        if (!this.nestedVariables) {
-            return;
-        }
-
-        this.nestedVariables.vars.forEach(callback, thisObj);
-    }
-
-    /**
-     * DEPRECATED
-     */
-    forEachImportedVariable(callback, thisObj) {
-        if (!this.importedVariables) {
-            return;
-        }
-
-        forEachEntry(this.importedVariables, function(key, importedVariable) {
-            callback.call(thisObj, importedVariable);
-        });
-    }
-
     forEachTransformer(callback, thisObj) {
         forEachEntry(this.transformers, function(key, transformer) {
             callback.call(thisObj, transformer);
@@ -157,55 +133,12 @@ class Tag {
         return hasOwnProperty.call(this.attributes, attrName);
     }
 
-    /**
-     * DEPRECATED
-     */
-    addNestedVariable(nestedVariable) {
-        complain(
-            "addNestedVariable is deprecated. Use tag parameters instead.",
-            { location: this.filePath }
-        );
-
-        if (!this.nestedVariables) {
-            this.nestedVariables = {
-                __noMerge: true,
-                vars: []
-            };
-        }
-
-        this.nestedVariables.vars.push(nestedVariable);
-    }
-    /**
-     * DEPRECATED
-     */
-    addImportedVariable(importedVariable) {
-        if (!this.importedVariables) {
-            this.importedVariables = {};
-        }
-        var key = importedVariable.targetProperty;
-        this.importedVariables[key] = importedVariable;
-    }
     addTransformer(transformer) {
         var key = transformer.path;
         transformer.taglibId = this.taglibId;
         this.transformers[key] = transformer;
     }
-    /**
-     * DEPRECATED
-     */
-    setBodyFunction(name, params) {
-        this.bodyFunction = {
-            __noMerge: true,
-            name: name,
-            params: params
-        };
-    }
-    /**
-     * DEPRECATED
-     */
-    setBodyProperty(propertyName) {
-        this.bodyProperty = propertyName;
-    }
+
     addNestedTag(nestedTag) {
         ok(nestedTag.name, '"nestedTag.name" is required');
 

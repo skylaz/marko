@@ -1,17 +1,19 @@
 module.exports = function render(input, out) {
-    var shouldPreserve = Boolean(!("if" in input) || input["if"]);
+    var componentsContext = out.___components;
+    var isHydrate =
+        componentsContext && componentsContext.___globalContext.___isHydrate;
     var ownerComponentDef = out.___assignedComponentDef;
     var ownerComponent = ownerComponentDef.___component;
     var key = out.___assignedKey;
+    var shouldPreserve = !("if" in input) || input["if"];
+    var isPreserved = Boolean(
+        shouldPreserve && (isHydrate || ownerComponent.___keyedElements[key])
+    );
 
-    out.___beginFragment(key, ownerComponent, true);
+    out.___beginFragment(key, ownerComponent, shouldPreserve);
 
-    if (input.renderBody) {
-        var globalContext = out.___components.___globalContext;
-        var parentPreserved = globalContext.___isPreserved;
-        globalContext.___isPreserved = parentPreserved || shouldPreserve;
+    if (!isPreserved && input.renderBody) {
         input.renderBody(out);
-        globalContext.___isPreserved = parentPreserved;
     }
 
     out.___endFragment();

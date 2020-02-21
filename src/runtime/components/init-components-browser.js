@@ -171,10 +171,6 @@ function addDOMEventListeners(
 function initComponent(componentDef, doc) {
     var component = componentDef.___component;
 
-    if (!component || !component.___isComponent) {
-        return; // legacy
-    }
-
     component.___reset();
     component.___document = doc;
 
