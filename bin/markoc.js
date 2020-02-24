@@ -5,33 +5,16 @@
 var fs = require("fs");
 var nodePath = require("path");
 var cwd = process.cwd();
-var resolveFrom = require("resolve-from");
+var resolveFrom = require("resolve-from").silent;
 
 // Try to use the Marko compiler installed with the project
-var markoCompilerPath;
+var markoCompilerPath = resolveFrom(process.cwd(), "marko/compiler");
 const markocPkgVersion = require("../package.json").version;
 
-var markoPkgVersion;
-try {
-    var markoPkgPath = resolveFrom(process.cwd(), "marko/package.json");
-    markoPkgVersion = require(markoPkgPath).version;
-} catch (e) {
-    /* ignore error */
-}
+var markoPkgPath = resolveFrom(process.cwd(), "marko/package.json");
+var markoPkgVersion = markoPkgPath && require(markoPkgPath).version;
 
-try {
-    markoCompilerPath = resolveFrom(process.cwd(), "marko/compiler");
-} catch (e) {
-    /* ignore error */
-}
-
-var markoCompiler;
-
-if (markoCompilerPath) {
-    markoCompiler = require(markoCompilerPath);
-} else {
-    markoCompiler = require("../compiler");
-}
+var markoCompiler = markoCompilerPath ? require(markoCompilerPath) : require("../compiler");
 
 var Minimatch = require("minimatch").Minimatch;
 
