@@ -190,6 +190,11 @@ function Component(id) {
 
   this.___keyedElements = {};
   this.___keySequence = undefined;
+
+  // eslint-disable-next-line no-constant-condition
+  if ("MARKO_DEBUG") {
+    this.___hydratedWithoutRerender = false;
+  }
 }
 
 Component.prototype = componentProto = {

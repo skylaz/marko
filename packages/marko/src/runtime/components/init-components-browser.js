@@ -353,6 +353,10 @@ function hydrateComponentAndGetMount(componentDef, doc) {
         renderResult.afterInsert(doc);
       };
     } else {
+      // eslint-disable-next-line no-constant-condition
+      if ("MARKO_DEBUG") {
+        component.___hydratedWithoutRerender = true;
+      }
       trackComponent(componentDef);
     }
 

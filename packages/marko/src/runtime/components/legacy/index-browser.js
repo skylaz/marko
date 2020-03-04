@@ -37,6 +37,24 @@ if (Widget) {
     this.forceUpdate();
     this.update();
   };
+
+  // eslint-disable-next-line no-constant-condition
+  if ("MARKO_DEBUG") {
+    ["setProps", "rerender", "update", "forceUpdate"].forEach(function(
+      methodName
+    ) {
+      var originalMethod = WidgetProto[methodName];
+      WidgetProto[methodName] = function() {
+        if (this.___hydratedWithoutRerender) {
+          throw new Error(
+            "You cannot rerender a widget that is split or has no state.  You must use defineComponent with a getInitialState method, even if that method just returns the input. Widget: " +
+              this.___type
+          );
+        }
+        originalMethod.apply(this, arguments);
+      };
+    });
+  }
 }
 
 var RenderResult = require("../../RenderResult");

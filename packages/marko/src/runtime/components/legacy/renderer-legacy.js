@@ -9,7 +9,6 @@ var trackAsyncComponents = modernRenderer.___trackAsyncComponents;
 var beginComponent = require("../beginComponent");
 var endComponent = require("../endComponent");
 var w10NOOP = require("warp10/constants").NOOP;
-var complain = "MARKO_DEBUG" && require("complain");
 
 function createRendererFunc(templateRenderFunc, componentProps) {
   var typeName = componentProps.___type;
@@ -27,6 +26,7 @@ function createRendererFunc(templateRenderFunc, componentProps) {
     var globalComponentsContext = componentsContext.___globalContext;
 
     var component = globalComponentsContext.___rerenderComponent;
+    var isStateless = isSplit || !widgetState;
 
     var isRerender = component !== undefined;
     var id = assignedId;
@@ -64,20 +64,7 @@ function createRendererFunc(templateRenderFunc, componentProps) {
         customEvents,
         ownerComponentId
       );
-      if (isSplit) {
-        component.input = null;
-      } else if (input.widgetProps) {
-        // eslint-disable-next-line no-constant-condition
-        if ("MARKO_DEBUG") {
-          if (!widgetState) {
-            complain(
-              "Possible performance impact: this widget does not contain state, but is marked as a stateful widget. This will result in additional hydration data serialized.  In order for marko to identify this as a split widget, w-bind should use a widget.js with defineWidget rather than index.js with defineComponent.",
-              { location: typeName, level: 1 }
-            );
-          }
-        }
-        component.input = input.widgetProps;
-      }
+      component.input = null;
     } else {
       if (!component) {
         if (isRerender) {
@@ -121,7 +108,7 @@ function createRendererFunc(templateRenderFunc, componentProps) {
       component,
       key,
       ownerComponentDef,
-      isSplit,
+      isStateless,
       isFakeComponent
     );
     var parentLegacyComponentDef = componentsContext.___legacyComponentDef;
@@ -148,18 +135,14 @@ function createRendererFunc(templateRenderFunc, componentProps) {
             customEvents,
             ownerComponentId
           );
-          if (isSplit) {
-            component.input = null;
-          } else if (input.widgetProps) {
-            component.input = input.widgetProps;
-          }
+          component.input = null;
           Object.assign(component, oldComponent);
           beginComponent(
             componentsContext,
             component,
             key,
             ownerComponentDef,
-            isSplit,
+            isStateless,
             false,
             this
           );

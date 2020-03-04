@@ -70,6 +70,7 @@ function runHydrateTest(fixture) {
     ssrTemplate
       .render({ components: components, $global: $global })
       .then(function(html) {
+        // console.log(require("diffable-html")(String(html)));
         var browser = createBrowserWithMarko(__dirname, String(html), {
           beforeParse(window, browser) {
             var marko = browser.require("marko/components");
